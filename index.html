@@ -36,18 +36,24 @@
         height: 40px;
         background-color: #0f0
     }
+    .ctrl{
+      position: absolute;
+      
+    }
     </style>
 </head>
 <body>
-
-    <div class="wrap">
-         <div class="head"></div>
-         <div class="food"></div>
-    </div>
+  <div class="ctrl">
     <p>分数 <span id="score">0</span></p>
     <button class="start"onclick="go()"id="go">开始</button>
     <button class="start"onclick="stop()"id="stop">暂停</button>
     <button onclick="restart()">重新开始</button>
+  </div>
+    <div class="wrap">
+         <div class="head"></div>
+         <div class="food"></div>
+    </div>
+
     <script src="js/jquery-1.10.2.js"></script>
     <script>
 
