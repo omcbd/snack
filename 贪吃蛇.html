@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .wrap{
+        width: 600px;
+        height: 600px;
+        margin: 0 auto;
+        border:1px solid #000;
+        position: relative;
+    }
+    .head{
+        width: 40px;
+        height: 40px;
+        background-color: #f00;
+        position: absolute;
+    }
+    .start{
+        text-align: center;
+    }
+    .food{
+        background-color: #abfdfa;
+        width: 40px;
+        height:40px;
+        position: absolute;
+    }
+    .snack-body{
+        position:absolute;
+        width: 40px;
+        height: 40px;
+        background-color: #0f0
+    }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+         <div class="head"></div>
+         <div class="food"></div>
+    </div>
+    <p>分数 <span id="score">0</span></p>
+    <button class="start"onclick="go()"id="go">开始</button>
+    <button class="start"onclick="stop()"id="stop">暂停</button>
+    <button onclick="restart()">重新开始</button>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script>
+
+    var headLeft=Math.floor(Math.random()*15)*40
+    var headTop=Math.floor(Math.random()*15)*40
+    $('.head').css({left:headLeft,top:headTop})
+    var foodLeft=Math.floor(Math.random()*15)*40
+    var foodTop=Math.floor(Math.random()*15)*40
+    $('.food').css({left:foodLeft,top:foodTop})
+    var direction = 2
+    var num=0
+    var total=0
+    var arr=[]
+    var prevleft
+    var prevtop
+    var gameover=false
+    var interval
+    function go(){
+        document.getElementById('go').onclick=null             //清除事件，防止再次点击干扰定时
+        document.onkeydown=function(e){
+            var e=event||window.event
+            switch(e.keyCode){
+                case 37:
+                    if(direction==2){
+                        break
+                    }else{
+                        direction=0
+                        break
+                    }
+
+                case 38:if(direction==3){
+                        break
+                    }else{
+                        direction=1
+                        break
+                    }
+                case 39:if(direction==0){
+                        break
+                    }else{
+                        direction=2
+                        break
+                    }
+                case 40:if(direction==1){
+                        break
+                    }else{
+                        direction=3
+                        break
+                    }
+            }
+        }
+
+        interval = setInterval(timer,500)
+    }
+    function timer(){
+
+            prevtop=headTop
+            prevleft=headLeft
+            switch(direction){
+                case 0:
+                     headLeft=headLeft-40
+                     impact()
+                     end(headLeft)
+                     break
+                case 1:
+                    headTop=headTop-40
+                    impact()
+                    end(headTop)
+                    break
+                case 2:
+                    headLeft=headLeft+40
+                    impact()
+                    end(headLeft)
+                    break
+
+                case 3:
+                    headTop=headTop+40
+                    impact()
+                    end(headTop)
+                    break
+
+            }
+            if(gameover){      //阻止游戏结束时 arr.push()
+                return
+            }else{
+                compare()       //total+1
+            arr.push({prevleft,prevtop}) //length+1
+            if(arr.length>total){       //控制arr数量
+               arr.shift()
+
+            }
+
+            for(var i=0;i<total;i++){
+                 $('.snack-body').eq(i).css({left:arr[(arr.length-(i+1))].prevleft,top:arr[(arr.length-(i+1))].prevtop})
+            }
+          }
+
+        }
+
+    function compare(){
+        if(headLeft==foodLeft&&headTop==foodTop){
+                change()
+                $('.food').css({left:foodLeft,top:foodTop})
+                    addbody()
+          }
+    }
+    function change(){
+        foodTop=Math.floor(Math.random()*15)*40
+        foodLeft=Math.floor(Math.random()*15)*40
+        if(foodLeft==headLeft&&foodTop==headTop){
+          change()
+        }
+    }
+    function addbody(){
+        var newbox = document.createElement('div')
+        newbox.className="snack-body"
+        $('.wrap').append(newbox)
+        total=total+1
+        document.getElementById('score').innerHTML=total
+    }
+    function stop(){
+        clearInterval(interval)
+        document.getElementById('go').onclick=go
+    }
+    function end(i){
+
+        if(i<0||i>560){
+            gameover=true
+            stop()
+            alert('gameover')
+            return
+
+         } else if(direction==0||direction==2){
+            $('.head').css({left:i+'px'})
+
+         }
+         else if(direction==1||direction==3){
+            $('.head').css({top:i+'px'})
+         }
+
+    }
+    function impact(){
+        for(var k =0;k<arr.length;k++){
+            if(headLeft==arr[k].prevleft&&headTop==arr[k].prevtop){
+                gameover=true
+                stop()
+                alert('gameover')
+            }
+        }
+    }
+    function restart(){
+        document.getElementById('go').onclick=go              //重新绑定事件
+         headLeft=Math.floor(Math.random()*15)*40
+         headTop=Math.floor(Math.random()*15)*40
+        $('.head').css({left:headLeft,top:headTop})
+         foodLeft=Math.floor(Math.random()*15)*40
+         foodTop=Math.floor(Math.random()*15)*40
+        $('.food').css({left:foodLeft,top:foodTop})
+         direction = 2
+         num=0
+         total=0
+         document.getElementById('score').innerHTML=0
+         arr=[]
+         clearInterval(interval)
+         gameover=false
+         $('.wrap').find('.snack-body').remove()
+    }
+    </script>
+</body>
+</html>
