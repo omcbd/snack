@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,28 +37,21 @@
         height: 40px;
         background-color: #0f0
     }
-    .ctrl{
-      position: absolute;
-      top:0;
-      left:0
-    }
     </style>
 </head>
 <body>
-  <div class="ctrl">
-     <p>请使用 ↑ ↓ ← → 操作 </p>
-    <p>分数 <span id="score">0</span></p>
-    <button class="start"onclick="go()"id="go">开始</button>
-    <button class="start"onclick="stop()"id="stop">暂停</button>
-    <button onclick="restart()">重新开始</button>
-  </div>
+
     <div class="wrap">
          <div class="head"></div>
          <div class="food"></div>
     </div>
-
+    <p>分数 <span id="score">0</span></p>
+    <button class="start"onclick="go()"id="go">开始</button>
+    <button class="start"onclick="stop()"id="stop">暂停</button>
+    <button onclick="restart()">重新开始</button>
     <script src="js/jquery-1.10.2.js"></script>
     <script>
+
     var headLeft=Math.floor(Math.random()*15)*40
     var headTop=Math.floor(Math.random()*15)*40
     $('.head').css({left:headLeft,top:headTop})
@@ -84,6 +78,7 @@
                         direction=0
                         break
                     }
+
                 case 38:if(direction==3){
                         break
                     }else{
@@ -104,12 +99,14 @@
                     }
             }
         }
+
         interval = setInterval(timer,500)
     }
     function timer(){
+
             prevtop=headTop
             prevleft=headLeft
-            var obj = {prevleft:prevleft,prevtop:prevtop}
+              var obj = {prevleft:prevleft,prevtop:prevtop}
             switch(direction){
                 case 0:
                      headLeft=headLeft-40
@@ -126,11 +123,13 @@
                     impact()
                     end(headLeft)
                     break
+
                 case 3:
                     headTop=headTop+40
                     impact()
                     end(headTop)
                     break
+
             }
             if(gameover){      //阻止游戏结束时 arr.push()
                 return
@@ -139,12 +138,16 @@
             arr.push(obj) //length+1
             if(arr.length>total){       //控制arr数量
                arr.shift()
+
             }
+
             for(var i=0;i<total;i++){
                  $('.snack-body').eq(i).css({left:arr[(arr.length-(i+1))].prevleft,top:arr[(arr.length-(i+1))].prevtop})
             }
           }
+
         }
+
     function compare(){
         if(headLeft==foodLeft&&headTop==foodTop){
                 change()
@@ -171,17 +174,21 @@
         document.getElementById('go').onclick=go
     }
     function end(i){
+
         if(i<0||i>560){
             gameover=true
             stop()
             alert('gameover')
             return
+
          } else if(direction==0||direction==2){
             $('.head').css({left:i+'px'})
+
          }
          else if(direction==1||direction==3){
             $('.head').css({top:i+'px'})
          }
+
     }
     function impact(){
         for(var k =0;k<arr.length;k++){
