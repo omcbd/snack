@@ -113,6 +113,7 @@
 
             prevtop=headTop
             prevleft=headLeft
+            var obj = {prevleft:prevleft,prevtop:prevtop}
             switch(direction){
                 case 0:
                      headLeft=headLeft-40
@@ -141,7 +142,7 @@
                 return
             }else{
                 compare()       //total+1
-            arr.push({prevleft:prevleft,prevtop:prevtop}) //length+1
+            arr.push(obj) //length+1
             if(arr.length>total){       //控制arr数量
                arr.shift()
 
